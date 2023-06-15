@@ -4,6 +4,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.verify
 import me.dio.credit.application.system.entity.Address
 import me.dio.credit.application.system.entity.Customer
@@ -72,6 +74,30 @@ class CustomerServiceTest {
         Assertions.assertThatExceptionOfType(BusinessException::class.java)
             .isThrownBy { customerService.findById(fakeId) }
             .withMessage("Id $fakeId not found")
+
+        verify(exactly = 1) { customerRepository.findById(fakeId) }
+    }
+
+
+    @Test
+    fun `should delete costumer by id`() {
+
+        // Given
+        val fakeId: Long = Random().nextLong()
+        val fakeCustomer: Customer = buildCustomer(id = fakeId)
+
+        every { customerRepository.findById(fakeId) } returns Optional.of(fakeCustomer)
+
+        every { customerRepository.delete(fakeCustomer) } just runs
+
+        // When
+        customerService.delete(fakeId)
+
+
+        // Then
+        verify(exactly = 1) { customerRepository.findById(fakeId) }
+
+        verify(exactly = 1) { customerRepository.delete(fakeCustomer) }
     }
 
     private fun buildCustomer (
