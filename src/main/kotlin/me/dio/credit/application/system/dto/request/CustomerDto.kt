@@ -1,4 +1,4 @@
-package me.dio.credit.application.system.dto
+package me.dio.credit.application.system.dto.request
 
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotEmpty
@@ -17,7 +17,7 @@ data class CustomerDto (
     @field:Email(message = "Invalid email")
     @field:NotEmpty(message = "Invalid input") val email: String,
     @field:NotEmpty(message = "Invalid input") val password: String,
-    @field:NotEmpty(message = "Invalid input") val zipcode: String,
+    @field:NotEmpty(message = "Invalid input") val zipCode: String,
     @field:NotEmpty(message = "Invalid input") val street: String
 
 ) {
@@ -29,7 +29,7 @@ data class CustomerDto (
         email = this.email,
         password = this.password,
         address = Address(
-            zipCode = this.zipcode,
+            zipCode = this.zipCode,
             street = this.street
         )
     )
